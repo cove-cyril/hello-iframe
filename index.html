@@ -65,6 +65,9 @@
             if (event.data.source === "cove-embed" && event.data.status === "USER_COMPLETE") {
                 console.log("message:", event.data)
 
+                const messageDisplay= document.getElementById('message-display');
+                messageDisplay.textContent = 'Received message: ' + event.data.status;
+
                 const coveEmbed = document.getElementById('cove-embed');
                 coveEmbed.remove();
             }
