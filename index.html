@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parent Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        iframe {
+            width: 100%;
+            border: 1px solid #ccc;
+            margin: 20px 0;
+        }
+        #message-display {
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+            min-height: 50px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Parent Page</h1>
+    <div id="message-display">Messages from iframe will appear here...</div>
+
+    <iframe
+        id="child-frame"
+        title="Child Frame"
+        height="200"
+        width="100%"
+        src="http://127.0.0.1:5500/iframe.html"
+    ></iframe>
+
+    <iframe
+        title="Cove Embed"
+        id="cove-embed"
+        allow="camera; microphone; accelerometer"
+        sandbox="allow-scripts allow-same-origin"
+        height="800"
+        width="100%"
+        src="http://localhost:3000/s/680faa0a6c2d10c675b81a63" 
+
+    ></iframe>
+
+    <script>
+        window.addEventListener('message', function(event) {
+
+            const messageDisplay = document.getElementById('message-display');
+            messageDisplay.textContent = 'Received message: ' + event.data.status;
+
+            // For security, verify the origin
+            if (event.origin !== 'https://app.cove.dev' &&
+                event.origin !== 'https://sandbox.cove.dev' &&
+                event.origin !== 'http://localhost:3000' &&
+                event.origin !== 'http://localhost:3001'
+            ) {
+                return;
+            }
+
+            if (event.data.source === "cove-embed" && event.data.status === "USER_COMPLETE") {
+                console.log("message:", event.data)
+
+                const coveEmbed = document.getElementById('cove-embed');
+                coveEmbed.remove();
+            }
+            
+        });
+    </script>
+</body>
+</html>
